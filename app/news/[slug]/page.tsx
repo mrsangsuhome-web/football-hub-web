@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getArticle } from "@/lib/api";
+import { articles } from "@/lib/articles";
 
 type Props = {
   params: Promise<{
@@ -7,27 +7,42 @@ type Props = {
   }>;
 };
 
-export default async function NewsPage({
-  params,
-}: Props) {
+export async function generateStaticParams() {
+  return articles.map((article) => ({
+    slug: article.slug,
+  }));
+}
 
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
 
-  const result =
-    await getArticle(slug);
+  const article = articles.find((a) => a.slug === slug);
 
-  if (!result.success) {
+  if (!article) {
+    return {
+      title: "Article Not Found",
+    };
+  }
+
+  return {
+    title: article.title,
+    description: article.description,
+  };
+}
+
+export default async function NewsArticlePage({ params }: Props) {
+  const { slug } = await params;
+
+  const article = articles.find((a) => a.slug === slug);
+
+  if (!article) {
     notFound();
   }
 
-  const article = result.data;
-
   return (
     <main className="max-w-4xl mx-auto p-6">
-
-      <article className="bg-white border rounded-xl p-8">
-
-        <div className="text-sm text-blue-600">
+      <article className="bg-white border rounded-xl p-6">
+        <div className="text-sm text-gray-500">
           {article.category}
         </div>
 
@@ -35,26 +50,25 @@ export default async function NewsPage({
           {article.title}
         </h1>
 
-        <div className="mt-2 text-gray-500">
+        <div className="text-sm text-gray-500 mt-2">
           {article.date}
         </div>
 
-        <p className="mt-4 text-gray-600">
-          {article.description}
-        </p>
+        <div className="mt-6 prose max-w-none">
+          <p>
+            {article.description}
+          </p>
 
-        <div className="mt-8 whitespace-pre-line leading-8">
-          {article.content}
+          <p>
+            Football Hub analysis and coverage for FIFA World Cup 2026.
+          </p>
+
+          <p>
+            This article is part of our prediction, preview and
+            football statistics section.
+          </p>
         </div>
-
       </article>
-
     </main>
   );
-}
-export async function generateMetadata() {
-  return {
-    title: article.title,
-    description: article.description,
-  };
 }

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getTeam } from "@/lib/api";
+import { teams } from "@/lib/teams";
 
 type Props = {
   params: Promise<{
@@ -7,40 +7,58 @@ type Props = {
   }>;
 };
 
-export default async function TeamPage({
-  params,
-}: Props) {
+export async function generateStaticParams() {
+  return teams.map((team) => ({
+    slug: team.slug,
+  }));
+}
 
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
 
-  const result =
-    await getTeam(slug);
+  const team = teams.find((t) => t.slug === slug);
 
-  if (!result.success) {
+  if (!team) {
+    return {
+      title: "Team Not Found",
+    };
+  }
+
+  return {
+    title: `${team.name} Team Profile`,
+    description: `${team.name} squad, statistics and World Cup analysis.`,
+  };
+}
+
+export default async function TeamPage({ params }: Props) {
+  const { slug } = await params;
+
+  const team = teams.find((t) => t.slug === slug);
+
+  if (!team) {
     notFound();
   }
 
-  const team = result.data;
-
   return (
-    <main className="max-w-7xl mx-auto p-6">
+    <main className="max-w-5xl mx-auto p-6">
+      <h1 className="text-4xl font-bold">
+        {team.name}
+      </h1>
 
-      <div className="bg-white border rounded-xl p-8">
+      <p className="mt-4 text-gray-600">
+        Confederation: {team.confederation}
+      </p>
 
-        <h1 className="text-4xl font-bold">
-          {team.name}
-        </h1>
+      <div className="mt-8 bg-white border rounded-xl p-6">
+        <h2 className="text-2xl font-semibold mb-4">
+          Team Analysis
+        </h2>
 
-        <div className="mt-3">
-          FIFA Rank #{team.rank}
-        </div>
-
-        <div className="mt-2">
-          Coach: {team.coach}
-        </div>
-
+        <p>
+          {team.name} is one of the featured national teams in
+          Football Hub's FIFA World Cup 2026 coverage.
+        </p>
       </div>
-
     </main>
   );
 }

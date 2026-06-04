@@ -1,26 +1,5 @@
 import { notFound } from "next/navigation";
-
-const groups = {
-  a: {
-    name: "Group A",
-    teams: [
-      "Brazil",
-      "Argentina",
-      "Japan",
-      "Canada",
-    ],
-  },
-
-  b: {
-    name: "Group B",
-    teams: [
-      "France",
-      "Germany",
-      "Mexico",
-      "Morocco",
-    ],
-  },
-};
+import { groups } from "@/lib/groups";
 
 type Props = {
   params: Promise<{
@@ -28,57 +7,80 @@ type Props = {
   }>;
 };
 
-export default async function GroupPage({
-  params,
-}: Props) {
+export async function generateStaticParams() {
+  return groups.map((group) => ({
+    slug: group.slug,
+  }));
+}
 
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
 
-  const group =
-    groups[
-      slug.toLowerCase() as keyof typeof groups
-    ];
+  const group = groups.find(
+    (g) => g.slug === slug
+  );
+
+  if (!group) {
+    return {
+      title: "Group Not Found",
+    };
+  }
+
+  return {
+    title: `${group.name} | FIFA World Cup 2026`,
+    description: `${group.name} teams, fixtures and standings.`,
+  };
+}
+
+export default async function WorldCupGroupPage({
+  params,
+}: Props) {
+  const { slug } = await params;
+
+  const group = groups.find(
+    (g) => g.slug === slug
+  );
 
   if (!group) {
     notFound();
   }
 
   return (
-    <main className="max-w-7xl mx-auto p-6">
+    <main className="max-w-5xl mx-auto p-6">
+      <h1 className="text-4xl font-bold mb-6">
+        {group.name}
+      </h1>
 
-      <div className="bg-white border rounded-xl p-8">
-
-        <h1 className="text-4xl font-bold">
-          {group.name}
-        </h1>
-
-        <p className="mt-4 text-gray-500">
-          FIFA World Cup 2026
-        </p>
-
-      </div>
-
-      <section className="bg-white border rounded-xl p-6 mt-8">
-
-        <h2 className="text-2xl font-bold">
+      <div className="bg-white border rounded-xl p-6">
+        <h2 className="text-2xl font-semibold mb-4">
           Teams
         </h2>
 
-        <ul className="mt-4 space-y-3">
-
+        <div className="grid md:grid-cols-2 gap-4">
           {group.teams.map((team) => (
-            <li
+            <div
               key={team}
-              className="border rounded-lg p-3"
+              className="border rounded-lg p-4"
             >
               {team}
-            </li>
+            </div>
           ))}
+        </div>
+      </div>
 
-        </ul>
+      <div className="bg-white border rounded-xl p-6 mt-8">
+        <h2 className="text-2xl font-semibold mb-4">
+          Group Analysis
+        </h2>
 
-      </section>
-
+        <p>
+          {group.name} is one of the FIFA World Cup
+          2026 groups featured on Football Hub.
+          Follow standings, team profiles, match
+          previews and predictions throughout the
+          tournament.
+        </p>
+      </div>
     </main>
   );
 }

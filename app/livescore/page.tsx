@@ -1,40 +1,42 @@
-import { getLiveMatches } from "@/lib/api";
+import { getMatches } from "@/lib/api";
 
 export default async function LiveScorePage() {
+  let matches: any[] = [];
 
-  const data =
-    await getLiveMatches();
-
-  const matches =
-    data.response || [];
+  try {
+    const data = await getMatches("PL");
+    matches = data?.matches || [];
+  } catch (e) {
+    console.error(e);
+  }
 
   return (
     <main className="max-w-7xl mx-auto p-6">
       <h1 className="text-4xl font-bold mb-8">
-        Live Scores
+        Premier League Matches
       </h1>
 
       <div className="space-y-4">
-        {matches.map((match: any) => (
+        {matches.slice(0, 20).map((match) => (
           <div
-            key={match.fixture.id}
-            className="border rounded-xl p-4"
+            key={match.id}
+            className="bg-white border rounded-xl p-4"
           >
-            <h2 className="font-bold">
-              {match.teams.home.name}
+            <div className="font-semibold">
+              {match.homeTeam?.name}
               {" vs "}
-              {match.teams.away.name}
-            </h2>
+              {match.awayTeam?.name}
+            </div>
 
-            <p>
-              {match.goals.home}
-              {" - "}
-              {match.goals.away}
-            </p>
+            <div className="text-sm text-gray-500">
+              {match.utcDate}
+            </div>
 
-            <p>
-              {match.fixture.status.elapsed}'
-            </p>
+            <div>
+              {match.score?.fullTime?.home ?? "-"}
+              {" : "}
+              {match.score?.fullTime?.away ?? "-"}
+            </div>
           </div>
         ))}
       </div>

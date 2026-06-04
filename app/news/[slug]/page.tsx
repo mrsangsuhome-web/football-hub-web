@@ -52,3 +52,9 @@ export default async function NewsPage({
     </main>
   );
 }
+export async function generateMetadata() {
+  return {
+    title: article.title,
+    description: article.description,
+  };
+}

@@ -1,41 +1,44 @@
-
 import Link from "next/link";
-import { leagues } from "@/lib/leagues";
+import { getCompetitions } from "@/lib/api";
 
-export const metadata = {
-  title: "Football Leagues",
-  description:
-    "Explore football leagues, competitions and tournaments worldwide.",
-};
+export default async function LeaguePage() {
 
-export default function LeaguePage() {
+  const data =
+    await getCompetitions();
+
+  const leagues =
+    data.competitions || [];
+
   return (
     <main className="max-w-7xl mx-auto p-6">
+
       <h1 className="text-4xl font-bold mb-8">
         Football Leagues
       </h1>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {leagues.map((league) => (
+      <div className="grid md:grid-cols-3 gap-4">
+
+        {leagues.map((league: any) => (
+
           <Link
-            key={league.slug}
-            href={`/league/${league.slug}`}
-            className="bg-white border rounded-xl p-6 hover:shadow-md transition"
+            key={league.code}
+            href={`/league/${league.code}`}
+            className="bg-white border rounded-xl p-4"
           >
-            <h2 className="text-2xl font-bold">
+            <h2 className="font-bold">
               {league.name}
             </h2>
 
-            <p className="mt-2 text-sm text-gray-500">
-              {league.country}
+            <p>
+              {league.area?.name}
             </p>
 
-            <p className="mt-4 text-gray-600">
-              {league.description}
-            </p>
           </Link>
+
         ))}
+
       </div>
+
     </main>
   );
 }

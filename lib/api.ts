@@ -2,9 +2,24 @@ const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "https://football-hub-api-djhp.onrender.com";
 
-export async function getArticles() {
+export async function getCompetitions() {
   const res = await fetch(
-    `${API_URL}/api/articles`,
+    `${API_URL}/api/competitions`,
+    {
+      next: {
+        revalidate: 86400,
+      },
+    }
+  );
+
+  return res.json();
+}
+
+export async function getTeams(
+  code = "PL"
+) {
+  const res = await fetch(
+    `${API_URL}/api/teams?code=${code}`,
     {
       next: {
         revalidate: 3600,
@@ -12,30 +27,35 @@ export async function getArticles() {
     }
   );
 
-  if (!res.ok) {
-    return [];
-  }
-
-  const json = await res.json();
-
-  return json.data || [];
+  return res.json();
 }
 
-export async function getLiveMatches() {
+export async function getStandings(
+  code = "PL"
+) {
   const res = await fetch(
-    `${API_URL}/api/live`,
+    `${API_URL}/api/standings?code=${code}`,
     {
       next: {
-        revalidate: 60,
+        revalidate: 3600,
       },
     }
   );
 
-  if (!res.ok) {
-    return {
-      response: [],
-    };
-  }
+  return res.json();
+}
+
+export async function getMatches(
+  code = "PL"
+) {
+  const res = await fetch(
+    `${API_URL}/api/matches?code=${code}`,
+    {
+      next: {
+        revalidate: 300,
+      },
+    }
+  );
 
   return res.json();
 }

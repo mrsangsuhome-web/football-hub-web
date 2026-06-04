@@ -1,34 +1,39 @@
 import Link from "next/link";
-import { getMatches } from "@/lib/api";
+import { matches } from "@/lib/matches";
 
-export default async function MatchesPage() {
-  const result = await getMatches();
+export const metadata = {
+  title: "Matches",
+  description: "Football matches, previews and statistics.",
+};
 
-  const matches = result?.data ?? [];
-
+export default function MatchesPage() {
   return (
     <main className="max-w-7xl mx-auto p-6">
-      <h1 className="text-4xl font-bold mb-8">
-        Football Matches
+      <h1 className="text-4xl font-bold mb-6">
+        Matches
       </h1>
 
       <div className="space-y-4">
-        {matches.map((match: any) => (
+        {matches.map((match) => (
           <Link
-            key={match.slug}
+            key={match.id}
             href={`/match/${match.slug}`}
-            className="block border rounded-xl p-5 bg-white hover:shadow-md"
+            className="block bg-white border rounded-xl p-5 hover:shadow-md transition"
           >
-            <div className="text-sm text-gray-500">
-              {match.league}
-            </div>
+            <div className="flex justify-between items-center">
+              <div>
+                <h2 className="text-xl font-bold">
+                  {match.home} vs {match.away}
+                </h2>
 
-            <div className="text-2xl font-bold mt-2">
-              {match.home} vs {match.away}
-            </div>
+                <p className="text-gray-500">
+                  {match.league}
+                </p>
+              </div>
 
-            <div className="mt-2 text-gray-500">
-              Kick Off: {match.time}
+              <div className="font-semibold">
+                {match.time}
+              </div>
             </div>
           </Link>
         ))}

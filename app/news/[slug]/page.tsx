@@ -1,92 +1,40 @@
-import { notFound } from "next/navigation";
-import { articles } from "@/lib/articles";
+import Link from "next/link";
+import { leagues } from "@/lib/leagues";
 
-type Props = {
-  params: Promise<{
-    slug: string;
-  }>;
+export const metadata = {
+  title: "Football Leagues",
+  description:
+    "Explore football leagues, competitions and tournaments worldwide.",
 };
 
-export async function generateStaticParams() {
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
-
-export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
-
-  const article = articles.find((a) => a.slug === slug);
-
-  if (!article) {
-    return {
-      title: "Article Not Found",
-    };
-  }
-
-  return {
-    title: article.title,
-    description: article.description,
-  };
-}
-
-export default async function NewsArticlePage({ params }: Props) {
-  const { slug } = await params;
-
-  const article = articles.find((a) => a.slug === slug);
-
-  if (!article) {
-    notFound();
-  }
-
+export default function LeaguePage() {
   return (
-    <main className="max-w-4xl mx-auto p-6">
-      <article className="bg-white border rounded-xl p-6">
-        <div className="text-sm text-gray-500">
-          {article.category}
-        </div>
+    <main className="max-w-7xl mx-auto p-6">
+      <h1 className="text-4xl font-bold mb-8">
+        Football Leagues
+      </h1>
 
-        <h1 className="text-4xl font-bold mt-2">
-          {article.title}
-        </h1>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {leagues.map((league) => (
+          <Link
+            key={league.slug}
+            href={`/league/${league.slug}`}
+            className="bg-white border rounded-xl p-6 hover:shadow-md transition"
+          >
+            <h2 className="text-2xl font-bold">
+              {league.name}
+            </h2>
 
-        <div className="text-sm text-gray-500 mt-2">
-          {article.date}
-        </div>
+            <p className="mt-2 text-sm text-gray-500">
+              {league.country}
+            </p>
 
-        <div className="mt-6 prose max-w-none">
-          <p>
-            {article.description}
-          </p>
-
-          <p>
-            Football Hub analysis and coverage for FIFA World Cup 2026.
-          </p>
-
-          <p>
-            This article is part of our prediction, preview and
-            football statistics section.
-          </p>
-        </div>
-      </article>
+            <p className="mt-4 text-gray-600">
+              {league.description}
+            </p>
+          </Link>
+        ))}
+      </div>
     </main>
   );
-<h2 className="text-2xl font-bold mt-10 mb-4">
-  Related Articles
-</h2>
-
-<div className="space-y-3">
-  {articles
-    .filter((a) => a.slug !== article.slug)
-    .slice(0, 5)
-    .map((a) => (
-      <Link
-        key={a.slug}
-        href={`/news/${a.slug}`}
-        className="block border rounded-lg p-3"
-      >
-        {a.title}
-      </Link>
-    ))}
-</div>
 }

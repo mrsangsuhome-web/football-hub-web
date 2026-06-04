@@ -48,7 +48,7 @@ notFound();
 return ( <main className="max-w-5xl mx-auto p-6"> <h1 className="text-4xl font-bold">
 {league.name} </h1>
 
-```
+
   <p className="mt-2 text-gray-500">
     {league.country}
   </p>
@@ -84,7 +84,6 @@ return ( <main className="max-w-5xl mx-auto p-6"> <h1 className="text-4xl font-b
     </ul>
   </div>
 </main>
-```
 
 );
 }

@@ -1,66 +1,52 @@
-export const matches = [
-{
-id: 1,
-slug: "brazil-vs-argentina",
-home: "Brazil",
-away: "Argentina",
-league: "FIFA World Cup 2026",
-time: "19:00",
-},
-{
-id: 2,
-slug: "france-vs-germany",
-home: "France",
-away: "Germany",
-league: "FIFA World Cup 2026",
-time: "22:00",
-},
-{
-id: 3,
-slug: "spain-vs-england",
-home: "Spain",
-away: "England",
-league: "FIFA World Cup 2026",
-time: "01:00",
-},
-{
-id: 4,
-slug: "portugal-vs-netherlands",
-home: "Portugal",
-away: "Netherlands",
-league: "FIFA World Cup 2026",
-time: "18:00",
-},
-{
-id: 5,
-slug: "belgium-vs-croatia",
-home: "Belgium",
-away: "Croatia",
-league: "FIFA World Cup 2026",
-time: "20:00",
-},
-{
-id: 6,
-slug: "japan-vs-south-korea",
-home: "Japan",
-away: "South Korea",
-league: "FIFA World Cup 2026",
-time: "21:00",
-},
-{
-id: 7,
-slug: "mexico-vs-usa",
-home: "Mexico",
-away: "United States",
-league: "FIFA World Cup 2026",
-time: "23:00",
-},
-{
-id: 8,
-slug: "uruguay-vs-colombia",
-home: "Uruguay",
-away: "Colombia",
-league: "FIFA World Cup 2026",
-time: "02:00",
-}
+export type Match = {
+  id: number;
+  slug: string;
+  home: string;
+  away: string;
+  league: string;
+  time: string;
+};
+
+const teams = [
+  "Argentina",
+  "Brazil",
+  "France",
+  "Germany",
+  "England",
+  "Spain",
+  "Portugal",
+  "Netherlands",
+  "Belgium",
+  "Croatia",
+  "Japan",
+  "South Korea",
+  "Mexico",
+  "United States",
+  "Uruguay",
+  "Colombia",
+  "Canada",
+  "Morocco",
+  "Senegal",
+  "Iran",
 ];
+
+export const matches: Match[] = [];
+
+let id = 1;
+
+for (let i = 0; i < teams.length; i++) {
+  for (let j = i + 1; j < teams.length; j++) {
+    matches.push({
+      id: id++,
+      slug: `${teams[i]
+        .toLowerCase()
+        .replace(/\s/g, "-")}-vs-${teams[j]
+        .toLowerCase()
+        .replace(/\s/g, "-")}`,
+      home: teams[i],
+      away: teams[j],
+      league: "FIFA World Cup 2026",
+      time: `${18 + (id % 6)}:00`,
+    });
+  }
+}

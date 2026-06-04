@@ -71,4 +71,22 @@ export default async function NewsArticlePage({ params }: Props) {
       </article>
     </main>
   );
+<h2 className="text-2xl font-bold mt-10 mb-4">
+  Related Articles
+</h2>
+
+<div className="space-y-3">
+  {articles
+    .filter((a) => a.slug !== article.slug)
+    .slice(0, 5)
+    .map((a) => (
+      <Link
+        key={a.slug}
+        href={`/news/${a.slug}`}
+        className="block border rounded-lg p-3"
+      >
+        {a.title}
+      </Link>
+    ))}
+</div>
 }

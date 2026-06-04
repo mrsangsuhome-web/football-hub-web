@@ -4,10 +4,10 @@ import { teams } from "@/lib/teams";
 import { matches } from "@/lib/matches";
 import { articles } from "@/lib/articles";
 import { groups } from "@/lib/groups";
+import { leagues } from "@/lib/leagues";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-const baseUrl =
-"https://football-hub-web.vercel.app";
+const baseUrl = "https://football-hub-web.vercel.app";
 
 const staticPages = [
 "",
@@ -16,16 +16,17 @@ const staticPages = [
 "/news",
 "/predictions",
 "/standings",
+"/search",
 "/world-cup",
 "/world-cup/groups",
-"/search",
+"/league",
 ];
 
 const staticUrls = staticPages.map((page) => ({
 url: `${baseUrl}${page}`,
 lastModified: new Date(),
 changeFrequency: "daily" as const,
-priority: page === "" ? 1 : 0.8,
+priority: page === "" ? 1.0 : 0.8,
 }));
 
 const teamUrls = teams.map((team) => ({
@@ -56,11 +57,19 @@ changeFrequency: "weekly" as const,
 priority: 0.8,
 }));
 
+const leagueUrls = leagues.map((league) => ({
+url: `${baseUrl}/league/${league.slug}`,
+lastModified: new Date(),
+changeFrequency: "weekly" as const,
+priority: 0.8,
+}));
+
 return [
 ...staticUrls,
 ...teamUrls,
 ...matchUrls,
 ...articleUrls,
 ...groupUrls,
+...leagueUrls,
 ];
 }

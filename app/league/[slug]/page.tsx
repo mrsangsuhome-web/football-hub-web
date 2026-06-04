@@ -115,3 +115,20 @@ export default async function LeagueDetailPage({
     </main>
   );
 }
+export async function generateMetadata(
+  { params }: Props
+) {
+
+  const { slug } =
+    await params;
+
+  return {
+
+    title:
+      `${slug} League | Football Hub`,
+
+    description:
+      `${slug} standings, matches and teams.`
+
+  };
+}

@@ -1,64 +1,70 @@
-import { notFound } from "next/navigation";
-import { teams } from "@/lib/teams";
-
 type Props = {
   params: Promise<{
     slug: string;
   }>;
 };
 
-export async function generateStaticParams() {
-  return teams.map((team) => ({
-    slug: team.slug,
-  }));
-}
-
-export async function generateMetadata({ params }: Props) {
+export default async function TeamPage({
+  params,
+}: Props) {
   const { slug } = await params;
 
-  const team = teams.find((t) => t.slug === slug);
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL;
 
-  if (!team) {
-    return {
-      title: "Team Not Found",
-    };
-  }
+  const res = await fetch(
+    `${API_URL}/api/team/${slug}`,
+    {
+      next: {
+        revalidate: 3600,
+      },
+    }
+  );
 
-  return {
-    title: `${team.name} Team Profile`,
-    description: `${team.name} squad, statistics and World Cup analysis.`,
-  };
-}
-
-export default async function TeamPage({ params }: Props) {
-  const { slug } = await params;
-
-  const team = teams.find((t) => t.slug === slug);
-
-  if (!team) {
-    notFound();
-  }
+  const team = await res.json();
 
   return (
     <main className="max-w-5xl mx-auto p-6">
-      <h1 className="text-4xl font-bold">
+
+      <h1 className="text-4xl font-bold mb-8">
         {team.name}
       </h1>
 
-      <p className="mt-4 text-gray-600">
-        Confederation: {team.confederation}
-      </p>
+      {team.crest && (
 
-      <div className="mt-8 bg-white border rounded-xl p-6">
-        <h2 className="text-2xl font-semibold mb-4">
-          Team Analysis
-        </h2>
+        <img
+          src={team.crest}
+          alt={team.name}
+          width={150}
+          height={150}
+        />
+
+      )}
+
+      <div className="space-y-3 mt-6">
 
         <p>
-          {team.name} is one of the featured national teams in
-          Football Hub's FIFA World Cup 2026 coverage.
+          <strong>Country:</strong>{" "}
+          {team.area?.name}
         </p>
+
+        <p>
+          <strong>Founded:</strong>{" "}
+          {team.founded}
+        </p>
+
+        <p>
+          <strong>Venue:</strong>{" "}
+          {team.venue}
+        </p>
+
+        <p>
+          <strong>Website:</strong>{" "}
+          {team.website}
+        </p>
+
       </div>
+
     </main>
   );
 }

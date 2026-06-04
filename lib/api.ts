@@ -4,42 +4,7 @@ const API_URL =
 
 export async function getCompetitions() {
   const res = await fetch(
-    `${API_URL}/api/competitions`,
-    {
-      next: {
-        revalidate: 86400,
-      },
-    }
-  );
-
-  return res.json();
-}
-
-export async function getTeams(
-  code = "PL"
-) {
-  const res = await fetch(
-    `${API_URL}/api/teams?code=${code}`,
-    {
-      next: {
-        revalidate: 3600,
-      },
-    }
-  );
-
-  return res.json();
-}
-
-export async function getStandings(
-  code = "PL"
-) {
-  const res = await fetch(
-    `${API_URL}/api/standings?code=${code}`,
-    {
-      next: {
-        revalidate: 3600,
-      },
-    }
+    `${API_URL}/api/competitions`
   );
 
   return res.json();
@@ -49,12 +14,31 @@ export async function getMatches(
   code = "PL"
 ) {
   const res = await fetch(
-    `${API_URL}/api/matches?code=${code}`,
-    {
-      next: {
-        revalidate: 300,
-      },
-    }
+    `${API_URL}/api/matches?code=${code}`
+  );
+
+  return res.json();
+}
+
+export async function getLiveMatches() {
+  return getMatches("PL");
+}
+
+export async function getStandings(
+  code = "PL"
+) {
+  const res = await fetch(
+    `${API_URL}/api/standings?code=${code}`
+  );
+
+  return res.json();
+}
+
+export async function getTeams(
+  code = "PL"
+) {
+  const res = await fetch(
+    `${API_URL}/api/teams?code=${code}`
   );
 
   return res.json();

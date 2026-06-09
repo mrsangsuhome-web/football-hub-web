@@ -1,0 +1,1 @@
+export default function AdBanner(){return <div>Ad Banner</div>}

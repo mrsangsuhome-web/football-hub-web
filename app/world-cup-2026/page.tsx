@@ -1,0 +1,1 @@
+export const metadata={title:'World Cup 2026'}; export default function Page(){return <div>World Cup Hub</div>}

@@ -1,23 +1,71 @@
+
 export default function WorldCupBanner() {
+
   return (
-    <div className="bg-black text-white rounded-xl p-8">
+
+    <div
+      className="
+      rounded-2xl
+      border
+      p-8
+      mb-8
+      text-center
+      bg-gradient-to-r
+      from-gray-50
+      to-white
+    "
+    >
 
       <h2 className="text-4xl font-bold">
-        FIFA World Cup 2026
+        🏆 FIFA World Cup 2026
       </h2>
 
-      <p className="mt-3 text-gray-300">
-        Schedule • Standings • Predictions • Analysis
+      <p className="mt-4 text-gray-500">
+        48 Teams • 12 Groups • 104 Matches
       </p>
 
-      <div className="mt-6">
+      <div className="mt-6 flex justify-center gap-3 flex-wrap">
 
-        <button className="bg-white text-black px-5 py-2 rounded-lg font-semibold">
-          Explore World Cup Center
-        </button>
+        <a
+          href="/world-cup-2026/schedule"
+          className="
+          border
+          rounded-lg
+          px-4
+          py-2
+        "
+        >
+          Schedule
+        </a>
+
+        <a
+          href="/world-cup-2026/groups"
+          className="
+          border
+          rounded-lg
+          px-4
+          py-2
+        "
+        >
+          Groups
+        </a>
+
+        <a
+          href="/world-cup-2026/bracket"
+          className="
+          border
+          rounded-lg
+          px-4
+          py-2
+        "
+        >
+          Bracket
+        </a>
 
       </div>
 
     </div>
+
   );
 }
+

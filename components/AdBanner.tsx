@@ -1,24 +1,40 @@
 
 "use client";
 
-type AdBannerProps = {
+type Props = {
   slot?: string;
 };
 
 export default function AdBanner({
-  slot,
-}: AdBannerProps) {
+  slot = "default",
+}: Props) {
 
   return (
 
-    <div className="border rounded-xl p-6 text-center my-6 bg-gray-50">
+    <div className="my-6">
 
-      <div className="text-sm text-gray-500">
-        Google AdSense
-      </div>
+      <div
+        className="
+        border
+        rounded-xl
+        p-6
+        text-center
+        bg-gray-50
+      "
+      >
 
-      <div className="font-semibold">
-        Ad Slot: {slot || "default"}
+        <div className="text-xs text-gray-500">
+          Advertisement
+        </div>
+
+        <div className="font-semibold">
+          Google AdSense
+        </div>
+
+        <div className="text-sm text-gray-500">
+          Slot: {slot}
+        </div>
+
       </div>
 
     </div>

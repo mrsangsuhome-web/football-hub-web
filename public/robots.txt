@@ -1,0 +1,8 @@
+
+User-agent: *
+
+Allow: /
+
+Sitemap:
+https://football-hub-web.vercel.app/sitemap.xml
+

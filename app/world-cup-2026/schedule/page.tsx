@@ -6,10 +6,18 @@ import { useEffect, useState } from "react";
 const API =
   "https://football-hub-api-djhp.onrender.com";
 
+type Match = {
+  home_team: string;
+  away_team: string;
+  date: string;
+  time: string;
+  group: string;
+};
+
 export default function SchedulePage() {
 
   const [matches, setMatches] =
-    useState<any[]>([]);
+    useState<Match[]>([]);
 
   useEffect(() => {
 
@@ -17,7 +25,8 @@ export default function SchedulePage() {
       `${API}/api/worldcup/schedule`
     )
       .then((r) => r.json())
-      .then(setMatches);
+      .then(setMatches)
+      .catch(console.error);
 
   }, []);
 
@@ -29,37 +38,46 @@ export default function SchedulePage() {
         FIFA World Cup 2026 Schedule
       </h1>
 
-      {matches.map((match, index) => (
+      <div className="space-y-3">
 
-        <div
-          key={index}
-          className="
-          border
-          rounded-xl
-          p-4
-          mb-3
-        "
-        >
+        {matches.map((match, index) => (
 
-          <div className="font-bold">
+          <div
+            key={index}
+            className="
+            border
+            rounded-xl
+            p-4
+          "
+          >
 
-            {match.home_team}
-            {" vs "}
-            {match.away_team}
+            <div className="font-bold">
+
+              {match.home_team}
+              {" vs "}
+              {match.away_team}
+
+            </div>
+
+            <div className="text-sm text-gray-500">
+
+              Group {match.group}
+
+            </div>
+
+            <div className="text-sm">
+
+              {match.date}
+              {" "}
+              {match.time}
+
+            </div>
 
           </div>
 
-          <div className="text-gray-500">
+        ))}
 
-            {match.date}
-            {" "}
-            {match.time}
-
-          </div>
-
-        </div>
-
-      ))}
+      </div>
 
     </main>
 

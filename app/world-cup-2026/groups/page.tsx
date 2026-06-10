@@ -17,7 +17,8 @@ export default function GroupsPage() {
       `${API}/api/worldcup/groups`
     )
       .then((r) => r.json())
-      .then(setGroups);
+      .then(setGroups)
+      .catch(console.error);
 
   }, []);
 
@@ -26,40 +27,46 @@ export default function GroupsPage() {
     <main className="max-w-7xl mx-auto p-6">
 
       <h1 className="text-4xl font-bold mb-6">
-        World Cup Groups
+        World Cup 2026 Groups
       </h1>
 
-      {Object.entries(groups).map(
-        ([group, teams]) => (
+      <div className="grid md:grid-cols-3 gap-4">
 
-          <div
-            key={group}
-            className="
-            border
-            rounded-xl
-            p-4
-            mb-4
-          "
-          >
+        {Object.entries(groups).map(
+          ([group, teams]) => (
 
-            <h2 className="font-bold">
-              Group {group}
-            </h2>
+            <div
+              key={group}
+              className="
+              border
+              rounded-xl
+              p-4
+            "
+            >
 
-            {(teams as string[]).map(
-              (team) => (
+              <h2 className="font-bold mb-3">
+                Group {group}
+              </h2>
 
-                <div key={team}>
-                  {team}
-                </div>
+              {(teams as string[]).map(
+                (team) => (
 
-              )
-            )}
+                  <div
+                    key={team}
+                    className="py-1"
+                  >
+                    {team}
+                  </div>
 
-          </div>
+                )
+              )}
 
-        )
-      )}
+            </div>
+
+          )
+        )}
+
+      </div>
 
     </main>
 
